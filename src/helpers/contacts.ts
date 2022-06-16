@@ -23,7 +23,9 @@ export const fetchDeviceContacts = (): Promise<{
 export const convertListToContacts = (contacts: Contact[]): IContact[] => {
   let output: IContact[] = [];
   contacts.map((contact, index) => {
-    const name: string = contact.displayName;
+    const name: string = contact.displayName
+      ? contact.displayName
+      : contact.phoneNumbers[0]?.number;
     const firstChar: string = name[0];
     const headerInserted: boolean = checkIfExist(output, firstChar);
 

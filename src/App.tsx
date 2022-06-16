@@ -1,15 +1,19 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState} from 'react';
 import {
+  Platform,
   SafeAreaView,
   StatusBar,
   StyleSheet,
+  LogBox,
   useColorScheme,
+  Pressable,
+  Text,
 } from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {convertListToContacts, fetchDeviceContacts} from './helpers/contacts';
 import {readPhoneBookPermission} from './helpers/permissions';
-import {backgroundColor} from './constants/colors';
+import {blue, white} from './constants/colors';
 import Header from './components/Header';
 import {IContact, ISelectedContact} from './interfaces/contacts';
 import ContactsList from './components/ContactsList';
@@ -28,6 +32,12 @@ const App = () => {
 
   // When the app start ask for permission to read the contacts then fetch it
   useEffect(() => {
+    LogBox.ignoreAllLogs();
+    if (Platform.OS! === 'android') {
+      fetchContacts();
+      return;
+    }
+
     readPhoneBookPermission()
       .then(() => {
         fetchContacts();
@@ -74,6 +84,7 @@ const App = () => {
       _allContacts[index].selected = false;
     });
 
+    setSelectedContacts([]);
     setAllContacts([..._allContacts]);
   };
 
@@ -123,6 +134,11 @@ const App = () => {
     setSelectedContacts([..._newSelectedContacts]);
   };
 
+  // click handler for the next button
+  const onNextButtonClick = () => {
+    Toast.show('The demo does not have more screens');
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
@@ -132,8 +148,18 @@ const App = () => {
         searchText={searchText}
         setSearchText={setSearchText}
       />
-      <SelectedList contacts={selectedContacts} onClick={contactClickHandler} />
+      {participantsCount > 0 && (
+        <SelectedList
+          contacts={selectedContacts}
+          onClick={contactClickHandler}
+        />
+      )}
       <ContactsList contacts={contacts} onClick={contactClickHandler} />
+      {participantsCount > 0 && (
+        <Pressable onPress={onNextButtonClick} style={styles.button}>
+          <Text style={styles.nextText}>Next</Text>
+        </Pressable>
+      )}
     </SafeAreaView>
   );
 };
@@ -142,7 +168,23 @@ export default App;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: backgroundColor,
+    backgroundColor: white,
     flex: 1,
+  },
+  button: {
+    position: 'absolute',
+    width: 381,
+    height: 60,
+    backgroundColor: blue,
+    bottom: 24,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  nextText: {
+    color: white,
+    fontWeight: '500',
+    fontSize: 16,
+    lineHeight: 24,
   },
 });

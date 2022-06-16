@@ -7,7 +7,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import {secondColor} from '../constants/colors';
+import {black, liteGray} from '../constants/colors';
 import {CONTACT_TYPE, IContact} from '../interfaces/contacts';
 import Contact from './Contact';
 
@@ -67,14 +67,17 @@ export default ContactsList;
 
 const styles = StyleSheet.create<Style>({
   headContainer: {
-    backgroundColor: secondColor,
+    backgroundColor: liteGray,
     width: '100%',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    paddingHorizontal: 16,
+    maxHeight: 42,
+    minHeight: 42,
+    justifyContent: 'center',
   },
   headText: {
-    fontWeight: 'bold',
-    fontSize: 16,
+    fontWeight: '500',
+    fontSize: 14,
     textAlign: 'left',
+    color: black,
   },
 });

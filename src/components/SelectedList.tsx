@@ -1,15 +1,19 @@
 import React, {ReactElement} from 'react';
 import {
   FlatList,
+  ImageBackground,
+  ImageStyle,
+  Pressable,
   StyleSheet,
   Text,
   TextStyle,
   View,
   ViewStyle,
 } from 'react-native';
-import {white, secondColor} from '../constants/colors';
+import {white, red, black} from '../constants/colors';
 import {ISelectedContact} from '../interfaces/contacts';
 import IAntdesign from 'react-native-vector-icons/AntDesign';
+import {profile} from '../constants/images';
 
 interface IProps {
   contacts: ISelectedContact[];
@@ -24,18 +28,9 @@ interface IItem {
 type Style = {
   container: ViewStyle;
   name: TextStyle;
-  nameCodeContainer: ViewStyle;
+  nameCodeContainer: ImageStyle;
   itemContainer: ViewStyle;
-  icon: TextStyle;
-};
-
-const nameCode = (name: string): string => {
-  let nameParts: string[] = name.split(' ');
-  if (nameParts.length === 1) {
-    return nameParts[0][0];
-  } else {
-    return nameParts[0][0] + nameParts[1][0];
-  }
+  iconContainer: ViewStyle;
 };
 
 const truncate = (name: string, maxLength: number) => {
@@ -50,18 +45,15 @@ const SelectedList = ({contacts, onClick}: IProps) => {
   const renderItem = ({item}: IItem): ReactElement => {
     return (
       <View style={styles.itemContainer}>
-        <View style={styles.nameCodeContainer}>
-          <Text>{nameCode(item.name)}</Text>
-          <IAntdesign
+        <ImageBackground style={styles.nameCodeContainer} source={profile}>
+          <Pressable
             onPress={() => {
               onClick(item.id);
             }}
-            style={styles.icon}
-            name="closecircle"
-            size={16}
-            color={white}
-          />
-        </View>
+            style={styles.iconContainer}>
+            <IAntdesign name="closecircle" size={16} color={red} />
+          </Pressable>
+        </ImageBackground>
         <Text style={styles.name}>{truncate(item.name, 12)}</Text>
       </View>
     );
@@ -84,7 +76,9 @@ const styles = StyleSheet.create<Style>({
   container: {
     width: '100%',
     marginVertical: 4,
+    maxHeight: 80,
     minHeight: 80,
+    backgroundColor: white,
   },
   itemContainer: {
     justifyContent: 'center',
@@ -95,20 +89,21 @@ const styles = StyleSheet.create<Style>({
   name: {
     fontSize: 12,
     textAlign: 'center',
-    color: secondColor,
+    color: black,
     marginTop: 4,
   },
   nameCodeContainer: {
-    backgroundColor: secondColor,
-    width: 40,
-    height: 40,
+    width: 48,
+    height: 48,
     borderRadius: 100,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  icon: {
+  iconContainer: {
     position: 'absolute',
-    right: 0,
-    top: 0,
+    backgroundColor: white,
+    borderRadius: 100,
+    right: -2,
+    top: -2,
   },
 });

@@ -8,15 +8,19 @@ import {
   TextStyle,
   Pressable,
 } from 'react-native';
-import {secondColor, textBoxBGColor} from '../constants/colors';
+import {blue, gray, white} from '../constants/colors';
 import {MAX_PARTICIPANTS} from '../constants/settings';
+import IAntDesign from 'react-native-vector-icons/AntDesign';
 
 type Style = {
   container: ViewStyle;
   searchTextBox: ViewStyle;
   row: ViewStyle;
-  centralize: ViewStyle;
+  participantsInfo: ViewStyle;
   addParticipantsText: TextStyle;
+  participantsCount: TextStyle;
+  cancelText: TextStyle;
+  searchInputContainer: ViewStyle;
 };
 
 interface IProps {
@@ -35,22 +39,26 @@ const Header = ({
   return (
     <View style={styles.container}>
       <View style={styles.row}>
-        <Pressable onPress={onClear}>
-          <Text>Clear</Text>
-        </Pressable>
-        <View style={styles.centralize}>
+        <View style={styles.participantsInfo}>
           <Text style={styles.addParticipantsText}>Add Participants</Text>
-          <Text>
+          <Text style={styles.participantsCount}>
             {participantsCount}/{MAX_PARTICIPANTS}
           </Text>
         </View>
+        <Pressable onPress={onClear}>
+          <Text style={styles.cancelText}>Clear</Text>
+        </Pressable>
       </View>
-      <TextInput
-        style={styles.searchTextBox}
-        placeholder="Search"
-        value={searchText}
-        onChangeText={setSearchText}
-      />
+      <View style={styles.searchInputContainer}>
+        <IAntDesign name="search1" size={18} color={gray} />
+        <TextInput
+          style={styles.searchTextBox}
+          placeholder="Search"
+          value={searchText}
+          onChangeText={setSearchText}
+          placeholderTextColor={gray}
+        />
+      </View>
     </View>
   );
 };
@@ -59,19 +67,17 @@ export default Header;
 
 const styles = StyleSheet.create<Style>({
   container: {
-    height: 128,
-    backgroundColor: secondColor,
+    paddingTop: 16,
+    backgroundColor: blue,
     alignItems: 'center',
     justifyContent: 'center',
   },
   searchTextBox: {
-    backgroundColor: textBoxBGColor,
-    opacity: 0.8,
-    borderRadius: 8,
+    backgroundColor: white,
+    marginLeft: 16,
+    fontSize: 16,
+    lineHeight: 24,
     width: '90%',
-    height: 40,
-    paddingHorizontal: 10,
-    marginVertical: 10,
   },
   row: {
     width: '100%',
@@ -79,12 +85,38 @@ const styles = StyleSheet.create<Style>({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  centralize: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  participantsInfo: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
   },
   addParticipantsText: {
-    fontWeight: 'bold',
-    fontSize: 14,
+    fontWeight: '500',
+    fontSize: 16,
+    lineHeight: 27,
+    color: white,
+  },
+  participantsCount: {
+    fontWeight: '300',
+    fontSize: 12,
+    lineHeight: 21,
+    color: white,
+  },
+  cancelText: {
+    fontWeight: '200',
+    fontSize: 16,
+    lineHeight: 27,
+    color: white,
+  },
+  searchInputContainer: {
+    backgroundColor: white,
+    flexDirection: 'row',
+    borderRadius: 2,
+    width: '90%',
+    maxHeight: 49,
+    minHeight: 49,
+    alignItems: 'center',
+    paddingHorizontal: 21,
+    marginTop: 12,
+    marginBottom: 21,
   },
 });
